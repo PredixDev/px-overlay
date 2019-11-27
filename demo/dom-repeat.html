@@ -24,33 +24,91 @@ limitations under the License.
 
     <!-- Import custom element. Note: see comment about relative paths to dependencies in the *.html file referenced below -->
 
-    <link rel="import" href="../../px-theme/px-theme-styles.html">
+    <script type="module" src="../../px-theme/px-theme-styles.js"></script>
     <!-- <link rel="import" href="../../px-dark-theme/px-dark-theme-styles.html"> -->
-    <custom-style>
-      <style include="px-theme-styles" is="custom-style"></style>
-    </custom-style>
+    <!-- FIXME(polymer-modulizer):
+        These imperative modules that innerHTML your HTML are
+        a hacky way to be sure that any mixins in included style
+        modules are ready before any elements that reference them are
+        instantiated, otherwise the CSS @apply mixin polyfill won't be
+        able to expand the underlying CSS custom properties.
+        See: https://github.com/Polymer/polymer-modulizer/issues/154
+        -->
+    <script type="module">
+const $_documentContainer = document.createElement('template');
 
-    <link rel="import" href="../../promise-polyfill/promise-polyfill-lite.html"/>
-    <link rel="import" href="../../polymer/polymer.html"/>
-    <link rel="import" href="../../polymer/lib/elements/dom-repeat.html"/>
-    <link rel="import" href="../../polymer/lib/elements/dom-if.html"/>
-    <link rel="import" href="../../px-modal/px-modal.html"/>
-    <link rel="import" href="../../px-icon-set/px-icon-set.html"/>
-    <link rel="import" href="../../px-icon-set/px-icon.html"/>
-    <link rel="import" href="../px-overlay-content.html"/>
-    <link rel="import" href="../px-overlay-container.html"/>
+$_documentContainer.innerHTML = `<custom-style>
+      <style include="px-theme-styles" is="custom-style"></style>
+    </custom-style>`;
+
+document.body.appendChild($_documentContainer.content);
+</script>
+
+    <script type="module" src="../../@polymer/promise-polyfill/promise-polyfill-lite.js"></script>mplate');
+$_documentContainer.innerHTML = `<link rel="import" href="../../promise-polyfill/promise-polyfill-lite.html">`;
+document.body.appendChild($_documentContainer.content);
+</script>
+    <script type="module" src="../../@polymer/polymer/polymer-legacy.js"></script>ument.createElement('template');
+$_documentContainer.innerHTML = `<link rel="import" href="../../polymer/polymer.html">`;
+document.body.appendChild($_documentContainer.content);
+</script>
+    <script type="module" src="../../@polymer/polymer/lib/elements/dom-repeat.js"></script>ent('template');
+$_documentContainer.innerHTML = `<link rel="import" href="../../polymer/lib/elements/dom-repeat.html">`;
+document.body.appendChild($_documentContainer.content);
+</script>
+    <script type="module">
+const $_documentContainer = document.createElement('template');
+$_documentContainer.innerHTML = `<link rel="import" href="../../polymer/lib/elements/dom-if.html">`;
+document.body.appendChild($_documentContainer.content);
+</script>-if.js"></script>
+    <script type="module">
+const $_documentContainer = document.createElement('template');
+$_documentContainer.innerHTML = `<link rel="import" href="../../px-modal/px-modal.html">`;
+document.body.appendChild($_documentContainer.content);
+</script>/script>
+    <script type="module">
+const $_documentContainer = document.createElement('template');
+$_documentContainer.innerHTML = `<link rel="import" href="../../px-icon-set/px-icon-set.html">`;
+document.body.appendChild($_documentContainer.content);
+</script>/script>
+    <script type="module">
+const $_documentContainer = document.createElement('template');
+$_documentContainer.innerHTML = `<link rel="import" href="../../px-icon-set/px-icon.html">`;
+document.body.appendChild($_documentContainer.content);
+</script>/script>
+    <script type="module" src="../px-overlay-content.js"></script>ument.createElement('template');
+$_documentContainer.innerHTML = `<link rel="import" href="../px-overlay-content.html">`;
+document.body.appendChild($_documentContainer.content);
+</script>
+    <script type="module" src="../px-overlay-container.js"></script>ent.createElement('template');
+$_documentContainer.innerHTML = `<link rel="import" href="../px-overlay-container.html">`;
+document.body.appendChild($_documentContainer.content);
+</script>
   </head>
 
   <body>
-    <style>
+    <script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<style>
       .grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
 
       }
-    </style>
-    <p>This demo illustrates the difference between wrapping content in a div and appending to it vs just appending to the px-overlay-content. Try it in Shadow vs Shady DOM and Polymer 1 vs Polymer 2 to see the differences. HINT: There should be no difference in Polymer 2 regardless of DOM. There should be differneces in Polymer 1 for different DOM types </p>
-    <div class="grid">
+    </style>`;
+
+document.body.appendChild($_documentContainer.content);
+</script>
+    <script type="module">
+const $_documentContainer = document.createElement('template');
+$_documentContainer.innerHTML = `<p>This demo illustrates the difference between wrapping content in a div and appending to it vs just appending to the px-overlay-content. Try it in Shadow vs Shady DOM and Polymer 1 vs Polymer 2 to see the differences. HINT: There should be no difference in Polymer 2 regardless of DOM. There should be differneces in Polymer 1 for different DOM types </p>`;
+document.body.appendChild($_documentContainer.content);
+</script>
+    <script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<div class="grid">
       <div class="col">
         <h2>No wrap</h2>
         <h3>Local Content</h3>
@@ -63,7 +121,7 @@ limitations under the License.
         </px-overlay-content>
 
         <button id="addNoWrap" class="btn">Add one to dom-repeat</button>
-        <button id="subNoWrap"class="btn">Subtact one</button>
+        <button id="subNoWrap" class="btn">Subtact one</button>
         <button id="appendNoWrap" class="btn">Append new content</button>
         <button id="removeNoWrap" class="btn">Remove last content</button>
         <h3>Hoisted Content</h3>
@@ -90,107 +148,126 @@ limitations under the License.
         <h3>Hoisted Content</h3>
         <px-overlay-container container-type="wrap"></px-overlay-container>
       </div>
-    </div>
+    </div>`;
 
-    <script>
-      document.addEventListener("WebComponentsReady", () => {
-        const normOverlay = document.getElementById('nowrapper');
-        const normRepeater = Polymer.Element ? document.querySelector('dom-repeat.nowrap') : document.querySelector('template[is="dom-repeat"].nowrap');
-        const addNoWrap = document.getElementById('addNoWrap');
-        const subNoWrap = document.getElementById('subNoWrap');
-        const appendNoWrap = document.getElementById('appendNoWrap');
-        const removeNoWrap = document.getElementById('removeNoWrap');
+document.body.appendChild($_documentContainer.content);
+</script>
 
-        const wrappedOverlay = document.getElementById('wrapped');
-        const wrapper = document.getElementById('wrapper');
-        const wrapRepeater = Polymer.Element ? document.querySelector('dom-repeat.wrap') : document.querySelector('template[is="dom-repeat"].wrap');
-        const addWrap = document.getElementById('addWrap');
-        const subWrap = document.getElementById('subWrap');
-        const appendWrap = document.getElementById('appendWrap');
-        const removeWrap = document.getElementById('removeWrap');
+    <script type="module">
+import 'px-theme/px-theme-styles.js';
+import '@polymer/promise-polyfill/promise-polyfill-lite.js';
+import '@polymer/polymer/polymer-legacy.js';
+import '@polymer/polymer/lib/elements/dom-repeat.js';
+import '@polymer/polymer/lib/elements/dom-if.js';
+import 'px-modal/px-modal.js';
+import 'px-icon-set/px-icon-set.js';
+import 'px-icon-set/px-icon.js';
+import '../px-overlay-content.js';
+import '../px-overlay-container.js';
+import { PolymerElement } from '@polymer/polymer/polymer-element.js';
+const normOverlay = document.getElementById('nowrapper');
+const normRepeater = PolymerElement ? document.querySelector('dom-repeat.nowrap') : document.querySelector('template[is="dom-repeat"].nowrap');
+const addNoWrap = document.getElementById('addNoWrap');
+const subNoWrap = document.getElementById('subNoWrap');
+const appendNoWrap = document.getElementById('appendNoWrap');
+const removeNoWrap = document.getElementById('removeNoWrap');
 
-        let i = 100;
-        let iW = 100;
+const wrappedOverlay = document.getElementById('wrapped');
+const wrapper = document.getElementById('wrapper');
+const wrapRepeater = PolymerElement ? document.querySelector('dom-repeat.wrap') : document.querySelector('template[is="dom-repeat"].wrap');
+const addWrap = document.getElementById('addWrap');
+const subWrap = document.getElementById('subWrap');
+const appendWrap = document.getElementById('appendWrap');
+const removeWrap = document.getElementById('removeWrap');
 
-        const noWrapAppended = [];
-        const wrapAppended = [];
+let i = 100;
+let iW = 100;
 
-        normRepeater.items = [1,2,3,4,5];
-        wrapRepeater.items = [1,2,3,4,5];
+const noWrapAppended = [];
+const wrapAppended = [];
 
-        addNoWrap.addEventListener('click', () => {
-          const l = normRepeater.items.length + 1;
-          normRepeater.push('items', l);
-        });
-        addWrap.addEventListener('click', () => {
-          const l = wrapRepeater.items.length + 1;
-          wrapRepeater.push('items', l);
-        });
+normRepeater.items = [1,2,3,4,5];
+wrapRepeater.items = [1,2,3,4,5];
 
-        subNoWrap.addEventListener('click', () => {
-          normRepeater.pop('items');
-        });
-        subWrap.addEventListener('click', () => {
-          wrapRepeater.pop('items');
-        });
+addNoWrap.addEventListener('click', () => {
+  const l = normRepeater.items.length + 1;
+  normRepeater.push('items', l);
+});
+addWrap.addEventListener('click', () => {
+  const l = wrapRepeater.items.length + 1;
+  wrapRepeater.push('items', l);
+});
 
-        appendNoWrap.addEventListener('click', () => {
-          const elem = document.createElement('div');
-          elem.setAttribute('class', 'dynamic');
-          elem.textContent = i++;
-          noWrapAppended.push(elem)
-          normOverlay.appendChild(elem);
-        });
-        appendWrap.addEventListener('click', () => {
-          const elem = document.createElement('div');
-          elem.setAttribute('class', 'dynamic');
-          elem.textContent = iW++;
+subNoWrap.addEventListener('click', () => {
+  normRepeater.pop('items');
+});
+subWrap.addEventListener('click', () => {
+  wrapRepeater.pop('items');
+});
 
-          wrapAppended.push(elem);
-          wrapper.appendChild(elem);
-        });
+appendNoWrap.addEventListener('click', () => {
+  const elem = document.createElement('div');
+  elem.setAttribute('class', 'dynamic');
+  elem.textContent = i++;
+  noWrapAppended.push(elem)
+  normOverlay.appendChild(elem);
+});
+appendWrap.addEventListener('click', () => {
+  const elem = document.createElement('div');
+  elem.setAttribute('class', 'dynamic');
+  elem.textContent = iW++;
 
-        removeNoWrap.addEventListener('click', () => {
-          const elem = noWrapAppended.pop();
-          normOverlay.removeChild(elem);
+  wrapAppended.push(elem);
+  wrapper.appendChild(elem);
+});
 
-        });
-        removeWrap.addEventListener('click', () => {
-          const elem = wrapAppended.pop();
-          wrapper.removeChild(elem);
+removeNoWrap.addEventListener('click', () => {
+  const elem = noWrapAppended.pop();
+  normOverlay.removeChild(elem);
 
-        });
-      });
-    </script>
+});
+removeWrap.addEventListener('click', () => {
+  const elem = wrapAppended.pop();
+  wrapper.removeChild(elem);
 
-    <script type="text/javascript">
-      (function() {
-        'use strict';
+});
+</script>
 
-        var onload = function() {
-          // For native Imports, manually fire WebComponentsReady so user code
-          // can use the same code path for native and polyfill'd imports.
-          if (!window.HTMLImports) {
-            document.dispatchEvent(
-              new CustomEvent('WebComponentsReady', {bubbles: true})
-            );
-          }
-        };
+    <script type="module">
+import 'px-theme/px-theme-styles.js';
+import '@polymer/promise-polyfill/promise-polyfill-lite.js';
+import '@polymer/polymer/polymer-legacy.js';
+import '@polymer/polymer/lib/elements/dom-repeat.js';
+import '@polymer/polymer/lib/elements/dom-if.js';
+import 'px-modal/px-modal.js';
+import 'px-icon-set/px-icon-set.js';
+import 'px-icon-set/px-icon.js';
+import '../px-overlay-content.js';
+import '../px-overlay-container.js';
 
-        var webComponentsSupported = (
-          'registerElement' in document && 'import' in document.createElement('link') && 'content' in document.createElement('template')
-        );
+var onload = function() {
+  // For native Imports, manually fire WebComponentsReady so user code
+  // can use the same code path for native and polyfill'd imports.
+  if (!window.HTMLImports) {
+    document.dispatchEvent(
+      new CustomEvent('WebComponentsReady', {bubbles: true})
+    );
+  }
+};
 
-        if (!webComponentsSupported) {
-          var script = document.createElement('script');
-          script.async = true;
-          script.src = '../webcomponentsjs/webcomponents-lite.js';
-          script.onload = onload;
-          document.head.appendChild(script);
-        } else {
-          onload();
-        }
-      })();
-      </script>
+var webComponentsSupported = (
+  'registerElement' in document && 'import' in document.createElement('link') && 'content' in document.createElement('template')
+);
+
+if (!webComponentsSupported) {
+  var script = document.createElement('script');
+  script.async = true;
+  script.src = '../webcomponentsjs/webcomponents-lite.js';
+  script.onload = onload;
+  document.head.appendChild(script);
+} else {
+  onload();
+}
+</script>
   </body>
 </html>

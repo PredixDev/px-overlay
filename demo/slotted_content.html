@@ -22,39 +22,87 @@ limitations under the License.
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>px-overlay Demo</title>
     <!-- Requires Webcomponents.js polyfill is provided by the page for browsers that don't support html imports -->
-    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
     <!-- Import custom element. Note: see comment about relative paths to dependencies in the *.html file referenced below -->
 
-    <link rel="import" href="../../px-theme/px-theme-styles.html">
+    <script type="module" src="../../px-theme/px-theme-styles.js"></script>
     <!-- <link rel="import" href="../../px-dark-theme/px-dark-theme-styles.html"> -->
-    <custom-style>
-      <style include="px-theme-styles" is="custom-style"></style>
-    </custom-style>
+    <!-- FIXME(polymer-modulizer):
+        These imperative modules that innerHTML your HTML are
+        a hacky way to be sure that any mixins in included style
+        modules are ready before any elements that reference them are
+        instantiated, otherwise the CSS @apply mixin polyfill won't be
+        able to expand the underlying CSS custom properties.
+        See: https://github.com/Polymer/polymer-modulizer/issues/154
+        -->
+    <script type="module">
+const $_documentContainer = document.createElement('template');
 
-    <link rel="import" href="../../promise-polyfill/promise-polyfill-lite.html"/>
-    <link rel="import" href="../../polymer/polymer.html"/>
-    <link rel="import" href="../../px-modal/px-modal.html"/>
-    <link rel="import" href="../../px-icon-set/px-icon-set.html"/>
-    <link rel="import" href="../../px-icon-set/px-icon.html"/>
-    <link rel="import" href="../px-overlay-content.html"/>
-    <link rel="import" href="../px-overlay-container.html"/>
+$_documentContainer.innerHTML = `<custom-style>
+      <style include="px-theme-styles" is="custom-style"></style>
+    </custom-style>`;
+
+document.body.appendChild($_documentContainer.content);
+</script>
+
+    <script type="module" src="../../@polymer/promise-polyfill/promise-polyfill-lite.js"></script>mplate');
+$_documentContainer.innerHTML = `<link rel="import" href="../../promise-polyfill/promise-polyfill-lite.html">`;
+document.body.appendChild($_documentContainer.content);
+</script>
+    <script type="module">
+const $_documentContainer = document.createElement('template');
+$_documentContainer.innerHTML = `<link rel="import" href="../../polymer/polymer.html">`;
+document.body.appendChild($_documentContainer.content);
+</script>mer-legacy.js"></script>
+    <script type="module">
+const $_documentContainer = document.createElement('template');
+$_documentContainer.innerHTML = `<link rel="import" href="../../px-modal/px-modal.html">`;
+document.body.appendChild($_documentContainer.content);
+</script>/script>
+    <script type="module">
+const $_documentContainer = document.createElement('template');
+$_documentContainer.innerHTML = `<link rel="import" href="../../px-icon-set/px-icon-set.html">`;
+document.body.appendChild($_documentContainer.content);
+</script>/script>
+    <script type="module">
+const $_documentContainer = document.createElement('template');
+$_documentContainer.innerHTML = `<link rel="import" href="../../px-icon-set/px-icon.html">`;
+document.body.appendChild($_documentContainer.content);
+</script>/script>
+    <script type="module" src="../px-overlay-content.js"></script>ument.createElement('template');
+$_documentContainer.innerHTML = `<link rel="import" href="../px-overlay-content.html">`;
+document.body.appendChild($_documentContainer.content);
+</script>
+    <script type="module" src="../px-overlay-container.js"></script>ent.createElement('template');
+$_documentContainer.innerHTML = `<link rel="import" href="../px-overlay-container.html">`;
+document.body.appendChild($_documentContainer.content);
+</script>
   </head>
 
   <body>
-    <dom-bind>
+    <script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<dom-bind>
       <template is="dom-bind">
         <h3>Example px-modal in a custom component to maintain light dom and styling of light dom</h3>
         <px-modal-trigger trigger="{{openTrigger}}">
           <button class="btn">Open Modal</button>
         </px-modal-trigger>
-        <px-overlay-content event-names='["px-modal-rejected", "px-modal-accepted", "px-modal-dismissed"]'>
+        <px-overlay-content event-names="[&quot;px-modal-rejected&quot;, &quot;px-modal-accepted&quot;, &quot;px-modal-dismissed&quot;]">
           <example-wrapped-modal open-trigger="[[openTrigger]]"></example-wrapped-modal>
         </px-overlay-content>
       </template>
-    </dom-bind>
+    </dom-bind>`;
+
+document.body.appendChild($_documentContainer.content);
+</script>
 
 
-    <dom-module id="example-wrapped-modal">
+    <script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<dom-module id="example-wrapped-modal">
       <template>
       <style>
         * {
@@ -73,10 +121,7 @@ limitations under the License.
         }
       </style>
 
-      <px-modal
-        open-trigger="{{openTrigger}}"
-        reject-text="Abort"
-        accept-text="Starman">
+      <px-modal open-trigger="{{openTrigger}}" reject-text="Abort" accept-text="Starman">
         <h1 slot="header">My Custom Title</h1>
         <div slot="body">
           <p>My custom body</p>
@@ -84,16 +129,26 @@ limitations under the License.
         </div>
       </px-modal>
     </template>
-    </dom-module>
-    <script>
-    document.addEventListener('WebComponentsReady', function() {
-      Polymer({ is: 'example-wrapped-modal' });
-    });
+    </dom-module>`;
 
-    window.addEventListener("px-modal-accepted", (evt) => {
-      debugger
-    });
-    </script>
+document.body.appendChild($_documentContainer.content);
+</script>
+    <script type="module">
+import 'px-theme/px-theme-styles.js';
+import '@polymer/promise-polyfill/promise-polyfill-lite.js';
+import '@polymer/polymer/polymer-legacy.js';
+import 'px-modal/px-modal.js';
+import 'px-icon-set/px-icon-set.js';
+import 'px-icon-set/px-icon.js';
+import '../px-overlay-content.js';
+import '../px-overlay-container.js';
+import { Polymer } from '@polymer/polymer/lib/legacy/polymer-fn.js';
+Polymer({ is: 'example-wrapped-modal' });
+
+window.addEventListener("px-modal-accepted", (evt) => {
+  debugger
+});
+</script>
 
   </body>
 </html>

@@ -22,34 +22,65 @@ limitations under the License.
     <title>Web Component Test : Fixture for px-overlay</title>
 
     <!-- Requires Webcomponents.js polyfill is provided by the page for browsers that don't support html imports -->
-    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
     <!-- web-component-tester automatically provides local copy of brower.js below
          for any URL ending with "/web-component-tester/browser.js"
          when wct is run from the command line -->
-    <script src="../../web-component-tester/browser.js"></script>
-    <link rel="import" href="../../px-theme/px-theme-styles.html">
-    <link rel="import" href="../px-overlay-content.html" />
-    <link rel="import" href="../px-overlay-container.html" />
+    <script src="../../wct-browser-legacy/browser.js"></script>
+    <script type="module" src="../../px-theme/px-theme-styles.js"></script>
+    <script type="module" src="../px-overlay-content.js"></script>
+    <script type="module" src="../px-overlay-container.js"></script>
     <!-- Retain this link for px-theme-styles.html -->
-    <script src="px-overlay-custom-tests.js"></script>
-    <custom-style>
+    <script src="./px-overlay-custom-tests.js"></script>
+    <!-- FIXME(polymer-modulizer):
+        These imperative modules that innerHTML your HTML are
+        a hacky way to be sure that any mixins in included style
+        modules are ready before any elements that reference them are
+        instantiated, otherwise the CSS @apply mixin polyfill won't be
+        able to expand the underlying CSS custom properties.
+        See: https://github.com/Polymer/polymer-modulizer/issues/154
+        -->
+    <script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<custom-style>
       <style include="px-theme-styles" is="custom-style"></style>
-    </custom-style>
+    </custom-style>`;
+
+document.body.appendChild($_documentContainer.content);
+</script>
   </head>
 
   <body>
-    <h3>Web Component Test : Fixture for px-overlay</h3>
-    <px-overlay-container id="px-overlay-container-fixture"></px-overlay-container>
-    <div id="eventCatcher">
-      <px-overlay-content id="px-overlay-content-fixture" event-names='["test-event"]'>
+    <script type="module">
+const $_documentContainer = document.createElement('template');
+$_documentContainer.innerHTML = `<h3>Web Component Test : Fixture for px-overlay</h3>`;
+document.body.appendChild($_documentContainer.content);
+</script>
+    <script type="module">
+const $_documentContainer = document.createElement('template');
+$_documentContainer.innerHTML = `<px-overlay-container id="px-overlay-container-fixture"></px-overlay-container>`;
+document.body.appendChild($_documentContainer.content);
+</script>
+    <script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<div id="eventCatcher">
+      <px-overlay-content id="px-overlay-content-fixture" event-names="[&quot;test-event&quot;]">
         <span id="wrapper">
           <h1>HI DAVID</h1>
         </span>
       </px-overlay-content>
-    </div>
-    <script>
-      // little sloppy, but our content gets hoisted before our tests run, so we have a hard time finding our #wrapper. Save it here before it gets hoisted.
-      window._wrapper = document.getElementById('wrapper');
-    </script>
+    </div>`;
+
+document.body.appendChild($_documentContainer.content);
+</script>
+    <script type="module">
+import 'px-theme/px-theme-styles.js';
+import '../px-overlay-content.js';
+import '../px-overlay-container.js';
+// little sloppy, but our content gets hoisted before our tests run, so we have a hard time finding our #wrapper. Save it here before it gets hoisted.
+window._wrapper = document.getElementById('wrapper');
+</script>
   </body>
 </html>

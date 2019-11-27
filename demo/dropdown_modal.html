@@ -23,49 +23,94 @@ limitations under the License.
   <title>px-dropdown Demo: Custom Trigger</title>
 
   <!-- Load webcomponentsjs + Polymer -->
-  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-  <link rel="import" href="../../polymer/polymer.html"/>
+  <script src="../../@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
+  <script type="module" src="../../@polymer/polymer/polymer-legacy.js"></script>
 
   <!-- Load theme -->
-  <link rel="import" href="../../px-theme/px-theme-styles.html"/>
-  <custom-style>
+  <script type="module" src="../../px-theme/px-theme-styles.js"></script>
+  <!-- FIXME(polymer-modulizer):
+        These imperative modules that innerHTML your HTML are
+        a hacky way to be sure that any mixins in included style
+        modules are ready before any elements that reference them are
+        instantiated, otherwise the CSS @apply mixin polyfill won't be
+        able to expand the underlying CSS custom properties.
+        See: https://github.com/Polymer/polymer-modulizer/issues/154
+        -->
+    <script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<custom-style>
     <style include="px-theme-styles" is="custom-style"></style>
-  </custom-style>
+  </custom-style>`;
+
+document.body.appendChild($_documentContainer.content);
+</script>
 
   <!-- Load components -->
-  <link rel="import" href="../../px-dropdown/px-dropdown.html"/>
-  <link rel="import" href="../../px-modal/px-modal.html"/>
-  <link rel="import" href="../../px-modal/px-modal-trigger.html"/>
-  <style>
+  <script type="module" src="../../px-dropdown/px-dropdown.js"></script>eateElement('template');
+$_documentContainer.innerHTML = `<link rel="import" href="../../px-dropdown/px-dropdown.html">`;
+document.body.appendChild($_documentContainer.content);
+</script>
+  <script type="module">
+const $_documentContainer = document.createElement('template');
+$_documentContainer.innerHTML = `<link rel="import" href="../../px-modal/px-modal.html">`;
+document.body.appendChild($_documentContainer.content);
+</script>/script>
+  <script type="module">
+const $_documentContainer = document.createElement('template');
+$_documentContainer.innerHTML = `<link rel="import" href="../../px-modal/px-modal-trigger.html">`;
+document.body.appendChild($_documentContainer.content);
+</script>/script>
+  <script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<style>
     html {
       font-size: 15px;
     }
-  </style>
+  </style>`;
+
+document.body.appendChild($_documentContainer.content);
+</script>
 </head>
 <body>
 
-  <px-modal id="modal" header-text="This is a modal" accept-text="Accept" reject-text="Reject">
+  <script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<px-modal id="modal" header-text="This is a modal" accept-text="Accept" reject-text="Reject">
     <div slot="body">
       <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt labore, tenetur maiores eos aut explicabo. Soluta eaque illum, repudiandae, minus nesciunt itaque, aperiam consequuntur explicabo voluptatum veniam eveniet debitis vel.</p>
       <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt labore, tenetur maiores eos aut explicabo. Soluta eaque illum, repudiandae, minus nesciunt itaque, aperiam consequuntur explicabo voluptatum veniam eveniet debitis vel.</p>
-      <px-dropdown
-        id="dropdown"
-        hoist
-        items='[{"key":"1","val":"iPhone"},{"key":"2","val":"Android"},{"key":"3","val":"Blackberry"},{"key":"4","val":"I am a menu item so I cannot be selected","disableSelect":true},{"key":"5","val":"Flip Phone","disabled":true}]'>
+      <px-dropdown id="dropdown" hoist="" items="[{&quot;key&quot;:&quot;1&quot;,&quot;val&quot;:&quot;iPhone&quot;},{&quot;key&quot;:&quot;2&quot;,&quot;val&quot;:&quot;Android&quot;},{&quot;key&quot;:&quot;3&quot;,&quot;val&quot;:&quot;Blackberry&quot;},{&quot;key&quot;:&quot;4&quot;,&quot;val&quot;:&quot;I am a menu item so I cannot be selected&quot;,&quot;disableSelect&quot;:true},{&quot;key&quot;:&quot;5&quot;,&quot;val&quot;:&quot;Flip Phone&quot;,&quot;disabled&quot;:true}]">
       </px-dropdown>
     </div>
-  </px-modal>
-  <px-modal-trigger id="modalTrigger">
-    <button class="btn">Open Modal</button>
-  </px-modal-trigger>
-  <script>
-    const modal = document.getElementById('modal');
-    const modalTrigger = document.getElementById('modalTrigger');
-    const dropdown = document.getElementById('dropdown');
+  </px-modal>`;
 
-    // Bind modal trigger to modal
-    modal.openTrigger = modalTrigger;
-  </script>
+document.body.appendChild($_documentContainer.content);
+</script>
+  <script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<px-modal-trigger id="modalTrigger">
+    <button class="btn">Open Modal</button>
+  </px-modal-trigger>`;
+
+document.body.appendChild($_documentContainer.content);
+</script>
+  <script type="module">
+import '@polymer/polymer/polymer-legacy.js';
+import 'px-theme/px-theme-styles.js';
+import 'px-dropdown/px-dropdown.js';
+import 'px-modal/px-modal.js';
+import 'px-modal/px-modal-trigger.js';
+const modal = document.getElementById('modal');
+const modalTrigger = document.getElementById('modalTrigger');
+const dropdown = document.getElementById('dropdown');
+
+// Bind modal trigger to modal
+modal.openTrigger = modalTrigger;
+</script>
 
 </body>
 </html>
